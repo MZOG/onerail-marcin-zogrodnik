@@ -25,6 +25,7 @@ import type {
 } from "@/store/useProductListStore";
 import { Spinner } from "@/components/ui/spinner";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const PAGE_LIMIT = 12;
 const PRICE_OPTIONS = [0, 50, 100, 250, 500, 1000, 2000];
@@ -191,142 +192,148 @@ export default function Home() {
   const currentSortValue = `${sort.field}:${sort.order}`;
 
   return (
-    <Container>
-      <div>
-        <div className="controls flex items-center gap-10">
-          <Input
-            placeholder="Product name"
-            name="title"
-            value={filters.title}
-            onChange={handleFilterChange}
-            className="max-w-xs"
-          />
-          <Select
-            value={
-              filters.categoryId === "" ? "all" : String(filters.categoryId)
-            }
-            onValueChange={(val) => {
-              const categoryValue = val === "all" ? "" : Number(val);
-              setFilter("categoryId", categoryValue);
-            }}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              {categories.length > 0 &&
-                categories?.map((category) => (
-                  <SelectItem key={category.id} value={String(category.id)}>
-                    {category.name}
+    <>
+      <SEO
+        title="Marcin Zogrodnik"
+        description="OneRail Recruitment Task by Marcin Zogrodnik"
+      />
+      <Container>
+        <div>
+          <div className="controls flex items-center gap-10">
+            <Input
+              placeholder="Product name"
+              name="title"
+              value={filters.title}
+              onChange={handleFilterChange}
+              className="max-w-xs"
+            />
+            <Select
+              value={
+                filters.categoryId === "" ? "all" : String(filters.categoryId)
+              }
+              onValueChange={(val) => {
+                const categoryValue = val === "all" ? "" : Number(val);
+                setFilter("categoryId", categoryValue);
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.length > 0 &&
+                  categories?.map((category) => (
+                    <SelectItem key={category.id} value={String(category.id)}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={currentSortValue} onValueChange={handleSortChange}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort Products" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="title:asc">Title (A-Z)</SelectItem>
+                <SelectItem value="title:desc">Title (Z-A)</SelectItem>
+                <SelectItem value="price:asc">Price (Low to High)</SelectItem>
+                <SelectItem value="price:desc">Price (High to Low)</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={
+                filters.price_min === "" ? "none" : String(filters.price_min)
+              }
+              onValueChange={(val) => {
+                const numericValue = val === "none" ? "" : Number(val);
+                setFilter("price_min", numericValue);
+              }}
+            >
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Min Price" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">All Min</SelectItem>
+                {PRICE_OPTIONS.map((price) => (
+                  <SelectItem key={`min-${price}`} value={String(price)}>
+                    ${price}
                   </SelectItem>
                 ))}
-            </SelectContent>
-          </Select>
+              </SelectContent>
+            </Select>
 
-          <Select value={currentSortValue} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort Products" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="title:asc">Title (A-Z)</SelectItem>
-              <SelectItem value="title:desc">Title (Z-A)</SelectItem>
-              <SelectItem value="price:asc">Price (Low to High)</SelectItem>
-              <SelectItem value="price:desc">Price (High to Low)</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={
-              filters.price_min === "" ? "none" : String(filters.price_min)
-            }
-            onValueChange={(val) => {
-              const numericValue = val === "none" ? "" : Number(val);
-              setFilter("price_min", numericValue);
-            }}
-          >
-            <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder="Min Price" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">All Min</SelectItem>
-              {PRICE_OPTIONS.map((price) => (
-                <SelectItem key={`min-${price}`} value={String(price)}>
-                  ${price}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={
-              filters.price_max === "" ? "none" : String(filters.price_max)
-            }
-            onValueChange={(val) => {
-              const numericValue = val === "none" ? "" : Number(val);
-              setFilter("price_max", numericValue);
-            }}
-          >
-            <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder="Max Price" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">All Max</SelectItem>
-              {PRICE_OPTIONS.map((price) => (
-                <SelectItem key={`max-${price}`} value={String(price)}>
-                  ${price}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Button variant="outline" onClick={resetFilters}>
-            Reset Filters
-          </Button>
-        </div>
-
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-10"
-          style={{ opacity: isPlaceholderData ? 0.5 : 1 }}
-        >
-          {filteredAndSortedProducts.map((product) => (
-            <Link
-              to={`/products/${product.slug}`}
-              key={product.id}
-              className="space-y-2"
+            <Select
+              value={
+                filters.price_max === "" ? "none" : String(filters.price_max)
+              }
+              onValueChange={(val) => {
+                const numericValue = val === "none" ? "" : Number(val);
+                setFilter("price_max", numericValue);
+              }}
             >
-              <img
-                src={product.images[0]}
-                alt={product.title}
-                className="rounded-lg"
-              />
-              <h2 className="text-sm">{product.title}</h2>
-              <p className="text-sm font-semibold">${product.price}</p>
-            </Link>
-          ))}
-          {filteredAndSortedProducts.length === 0 && (
-            <p>No products match your criteria.</p>
-          )}
-        </div>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Max Price" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">All Max</SelectItem>
+                {PRICE_OPTIONS.map((price) => (
+                  <SelectItem key={`max-${price}`} value={String(price)}>
+                    ${price}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-        <div className="my-10 flex items-center justify-center gap-5">
-          <Button
-            size={"sm"}
-            onClick={() => setPage(Math.max(page - 1, 0))}
-            disabled={page === 0}
+            <Button variant="outline" onClick={resetFilters}>
+              Reset Filters
+            </Button>
+          </div>
+
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-10"
+            style={{ opacity: isPlaceholderData ? 0.5 : 1 }}
           >
-            <ArrowLeft />
-          </Button>
-          <span>{page + 1}</span>
-          <Button
-            size={"sm"}
-            onClick={() => hasNextPage && setPage(page + 1)}
-            disabled={isPlaceholderData || !hasNextPage}
-          >
-            <ArrowRight />
-          </Button>
+            {filteredAndSortedProducts.map((product) => (
+              <Link
+                to={`/products/${product.slug}`}
+                key={product.id}
+                className="space-y-2"
+              >
+                <img
+                  src={product.images[0]}
+                  alt={product.title}
+                  className="rounded-lg"
+                />
+                <h2 className="text-sm">{product.title}</h2>
+                <p className="text-sm font-semibold">${product.price}</p>
+              </Link>
+            ))}
+            {filteredAndSortedProducts.length === 0 && (
+              <p>No products match your criteria.</p>
+            )}
+          </div>
+
+          <div className="my-10 flex items-center justify-center gap-5">
+            <Button
+              size={"sm"}
+              onClick={() => setPage(Math.max(page - 1, 0))}
+              disabled={page === 0}
+            >
+              <ArrowLeft />
+            </Button>
+            <span>{page + 1}</span>
+            <Button
+              size={"sm"}
+              onClick={() => hasNextPage && setPage(page + 1)}
+              disabled={isPlaceholderData || !hasNextPage}
+            >
+              <ArrowRight />
+            </Button>
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import Container from "@/components/Container";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -261,114 +262,117 @@ export default function ProductForm({ mode }: ProductFormProps) {
   }
 
   return (
-    <Container className="max-w-3xl">
-      <h1 className="text-2xl font-bold mb-4">
-        {mode === "create" ? "Add New Product" : "Edit Product"}
-      </h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
-        <div className="space-y-2">
-          <Label htmlFor="title">Product name</Label>
-          <Input
-            type="text"
-            id="title"
-            name="title"
-            value={productDetails.title || ""}
-            onChange={handleChange}
-            placeholder="Product Name"
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            name="description"
-            value={productDetails.description || ""}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="price">Price</Label>
-          <Input
-            type="number"
-            id="price"
-            name="price"
-            value={productDetails.price || 0}
-            onChange={handleChange}
-            placeholder="$99"
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="categoryId">Category</Label>
-          {isCategoriesLoading ? (
-            <Spinner />
-          ) : (
-            <Select
-              value={
-                productDetails.categoryId === 0
-                  ? ""
-                  : productDetails.categoryId.toString()
-              }
-              onValueChange={handleCategoryChange}
+    <>
+      <SEO title={mode === "edit" ? "Edit product" : "Add new product"} />
+      <Container className="max-w-3xl">
+        <h1 className="text-2xl font-bold mb-4">
+          {mode === "create" ? "Add New Product" : "Edit Product"}
+        </h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
+          <div className="space-y-2">
+            <Label htmlFor="title">Product name</Label>
+            <Input
+              type="text"
+              id="title"
+              name="title"
+              value={productDetails.title || ""}
+              onChange={handleChange}
+              placeholder="Product Name"
               required
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.isArray(categories) && categories.length > 0 ? (
-                  categories.map((category) => (
-                    <SelectItem
-                      key={category.id}
-                      value={category.id.toString()}
-                    >
-                      {category.name}
-                    </SelectItem>
-                  ))
-                ) : (
-                  <SelectItem value="0" disabled>
-                    No categories available
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="images">Images (upload to get URLs)</Label>
-          <Input
-            type="file"
-            id="images"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-          />
-          <div className="flex gap-2 mt-2 flex-wrap">
-            {imagePreviews.map((preview, index) => (
-              <img
-                key={index}
-                src={preview}
-                alt={`Preview ${index}`}
-                className="w-20 h-20 object-cover rounded"
-              />
-            ))}
+            />
           </div>
-        </div>
 
-        <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending
-            ? "Submitting..."
-            : mode === "create"
-            ? "Add new product"
-            : "Update product"}
-        </Button>
-      </form>
-    </Container>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              name="description"
+              value={productDetails.description || ""}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="price">Price</Label>
+            <Input
+              type="number"
+              id="price"
+              name="price"
+              value={productDetails.price || 0}
+              onChange={handleChange}
+              placeholder="$99"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="categoryId">Category</Label>
+            {isCategoriesLoading ? (
+              <Spinner />
+            ) : (
+              <Select
+                value={
+                  productDetails.categoryId === 0
+                    ? ""
+                    : productDetails.categoryId.toString()
+                }
+                onValueChange={handleCategoryChange}
+                required
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.isArray(categories) && categories.length > 0 ? (
+                    categories.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="0" disabled>
+                      No categories available
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="images">Images (upload to get URLs)</Label>
+            <Input
+              type="file"
+              id="images"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+            />
+            <div className="flex gap-2 mt-2 flex-wrap">
+              {imagePreviews.map((preview, index) => (
+                <img
+                  key={index}
+                  src={preview}
+                  alt={`Preview ${index}`}
+                  className="w-20 h-20 object-cover rounded"
+                />
+              ))}
+            </div>
+          </div>
+
+          <Button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending
+              ? "Submitting..."
+              : mode === "create"
+              ? "Add new product"
+              : "Update product"}
+          </Button>
+        </form>
+      </Container>
+    </>
   );
 }

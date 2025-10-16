@@ -8,6 +8,9 @@ import { z } from "zod";
 import { registerUser, type RegisterProps } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import type { AxiosError } from "axios";
+import Container from "@/components/Container";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import SEO from "@/components/SEO";
 
 interface ApiErrorResponse {
   message?: string;
@@ -74,58 +77,64 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-2xl shadow">
-      <h1 className="text-2xl font-bold mb-4 text-center">Create an Account</h1>
+    <>
+      <SEO title="Create an Account" />
+      <Container className="flex justify-center mt-10">
+        <Card className="min-w-sm shadow-none">
+          <CardHeader>Create an Account</CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Full Name</Label>
-          <Input
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="avatar">Avatar URL</Label>
+                <Input
+                  id="avatar"
+                  name="avatar"
+                  value={formData.avatar}
+                  onChange={handleChange}
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="avatar">Avatar URL</Label>
-          <Input
-            id="avatar"
-            name="avatar"
-            value={formData.avatar}
-            onChange={handleChange}
-          />
-        </div>
-
-        <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? "Registering..." : "Register"}
-        </Button>
-      </form>
-    </div>
+              <Button type="submit" disabled={mutation.isPending}>
+                {mutation.isPending ? "Registering..." : "Register"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Container>
+    </>
   );
 }

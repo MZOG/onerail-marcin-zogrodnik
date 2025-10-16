@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import Container from "@/components/Container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import SEO from "@/components/SEO";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -29,28 +30,31 @@ export default function Login() {
   };
 
   return (
-    <Container className="flex justify-center mt-10">
-      <Card className="min-w-sm shadow-none">
-        <CardHeader>Login</CardHeader>
-        <CardContent>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-            <Input
-              type="text"
-              placeholder="Email"
-              className="border p-2 rounded"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              className="border p-2 rounded"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button type="submit">Sign In</Button>
-          </form>
-        </CardContent>
-      </Card>
-    </Container>
+    <>
+      <SEO title="Login" />
+      <Container className="flex justify-center mt-10">
+        <Card className="min-w-sm shadow-none">
+          <CardHeader>Login</CardHeader>
+          <CardContent>
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+              {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+              <Input
+                type="text"
+                placeholder="Email"
+                className="border p-2 rounded"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                type="password"
+                placeholder="Password"
+                className="border p-2 rounded"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Button type="submit">Sign In</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Container>
+    </>
   );
 }

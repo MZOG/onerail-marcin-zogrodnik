@@ -10,6 +10,7 @@ import * as z from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/axios";
+import SEO from "@/components/SEO";
 
 // Define Zod schema for user validation
 const UserValidation = z.object({
@@ -108,62 +109,65 @@ export default function Settings() {
   }
 
   return (
-    <Container className="max-w-3xl">
-      <div className="bg-gray-50 p-10 rounded-xl space-y-5">
-        <div className="grid w-full max-w-sm items-center gap-3">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            type="text"
-            id="name"
-            value={user.name}
-            className="bg-white shadow-none"
-            onChange={(e) => updateField("name", e.target.value)}
-          />
+    <>
+      <SEO title="Settings" />
+      <Container className="max-w-3xl">
+        <div className="bg-gray-50 p-10 rounded-xl space-y-5">
+          <div className="grid w-full max-w-sm items-center gap-3">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              type="text"
+              id="name"
+              value={user.name}
+              className="bg-white shadow-none"
+              onChange={(e) => updateField("name", e.target.value)}
+            />
+          </div>
+
+          <div className="grid w-full max-w-sm items-center gap-3">
+            <Label htmlFor="email">E-mail</Label>
+            <Input
+              type="email"
+              id="email"
+              value={user.email}
+              className="bg-white shadow-none"
+              onChange={(e) => updateField("email", e.target.value)}
+            />
+          </div>
+
+          <div className="grid w-full max-w-sm items-center gap-3">
+            <Label htmlFor="password">
+              Password (leave blank to keep unchanged)
+            </Label>
+            <Input
+              type="password"
+              id="password"
+              value={user.password || ""}
+              className="bg-white shadow-none"
+              onChange={(e) => updateField("password", e.target.value)}
+              placeholder="Enter new password"
+            />
+          </div>
+
+          <div className="grid w-full max-w-sm items-center gap-3">
+            <Label>
+              Last updated: {new Date(user.updatedAt).toLocaleString()}
+            </Label>
+          </div>
         </div>
 
-        <div className="grid w-full max-w-sm items-center gap-3">
-          <Label htmlFor="email">E-mail</Label>
-          <Input
-            type="email"
-            id="email"
-            value={user.email}
-            className="bg-white shadow-none"
-            onChange={(e) => updateField("email", e.target.value)}
-          />
+        <div className="mt-10">
+          <Button onClick={handleUpdate} size="sm" disabled={isSubmitting}>
+            {isSubmitting ? <Spinner /> : "Save"}
+          </Button>
         </div>
 
-        <div className="grid w-full max-w-sm items-center gap-3">
-          <Label htmlFor="password">
-            Password (leave blank to keep unchanged)
-          </Label>
-          <Input
-            type="password"
-            id="password"
-            value={user.password || ""}
-            className="bg-white shadow-none"
-            onChange={(e) => updateField("password", e.target.value)}
-            placeholder="Enter new password"
-          />
+        <div className="mt-10">
+          <Button variant="destructive" size="sm" onClick={logout}>
+            Logout
+          </Button>
         </div>
-
-        <div className="grid w-full max-w-sm items-center gap-3">
-          <Label>
-            Last updated: {new Date(user.updatedAt).toLocaleString()}
-          </Label>
-        </div>
-      </div>
-
-      <div className="mt-10">
-        <Button onClick={handleUpdate} size="sm" disabled={isSubmitting}>
-          {isSubmitting ? <Spinner /> : "Save"}
-        </Button>
-      </div>
-
-      <div className="mt-10">
-        <Button variant="destructive" size="sm" onClick={logout}>
-          Logout
-        </Button>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }
