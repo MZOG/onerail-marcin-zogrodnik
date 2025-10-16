@@ -17,7 +17,7 @@ import type { Category } from "@/types/Category";
 import type { Product } from "@/types/Product";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -73,7 +73,7 @@ const fetchProductBySlug = async (slug: string | undefined) => {
 
 export default function ProductForm({ mode }: ProductFormProps) {
   const { slug } = useParams();
-
+  const navigate = useNavigate();
   const [productDetails, setProductDetails] = useState<NewProductProps>({
     title: "",
     price: 0,
@@ -204,6 +204,7 @@ export default function ProductForm({ mode }: ProductFormProps) {
         images: [],
         categoryId: 0,
       });
+      navigate(`/products/${productData?.slug}`);
       setImagePreviews([]);
       toast.success(
         mode === "edit"
